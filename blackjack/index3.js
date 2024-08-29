@@ -1,15 +1,45 @@
-let firstCard = 10
-let secondCard = 4
-let cards = [firstCard, secondCard]
-let sum = firstCard + secondCard
+let cards = []
+let sum = 0
 let hasBlackJack = false
-let isAlive = true
+let isAlive = false
 let message = ""
 let messageEl = document.getElementById("message-el")
 let sumEl = document.getElementById("sum-el")
 let cardsEl = document.getElementById("cards-el")
 
+let player = {
+    name: "Farouk",
+    chips: 145
+}
+let playerEl = document.getElementById("player-el").textContent = player.name + ": $" + player.chips
+
+/**
+ * Returns a random number between 1 and 13, with 1 being represented as 11
+ * and numbers > 10 being represented as 10
+ * returns number a random number between 1 and 13
+ */
+function getRandomCard() {
+    let randomCard = Math.floor(Math.random() *13) + 1
+
+    if (randomCard > 10) {
+        return 10
+    } else if (randomCard === 1) {
+        return 11
+    } else {
+        return randomCard
+    }
+}
+/**
+ * Starts a new round of Blackjack.
+ * Sets isAlive to true, deals two new cards, and updates the message and cards elements.
+ */
 function startGame() {
+    isAlive = true
+    let firstCard = getRandomCard()
+    let secondCard = getRandomCard()
+    cards = [firstCard, secondCard]
+    sum = firstCard + secondCard
+
     renderGame()
 }
 
@@ -21,7 +51,11 @@ function startGame() {
  **/
 
 function renderGame() {
-    cardsEl.textContent = "Cards: " + cards[0] + " - " + cards[1]
+    cardsEl.textContent = "Cards: "
+    for (let i = 0; i < cards.length; i++) {
+        cardsEl.textContent += cards[i] + "-"
+    }
+
     sumEl.textContent = "Sum: " + sum
 
     if (sum <= 20) {
@@ -44,8 +78,11 @@ function renderGame() {
  */
 
 function newCard() {
-    let card = 7 
+    if (isAlive === true && hasBlackJack === false) {
+        let card = getRandomCard()        
 
-    sum += card
-    renderGame()
+        sum += card
+        cards.push(card)
+        renderGame()
+    }
 }
